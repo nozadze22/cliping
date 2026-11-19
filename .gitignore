@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Build output and caches
+dist/
+build/
+.svelte-kit/
+.output/
+.vercel/
+.netlify/
+.wrangler/
+coverage/
+.cache/
+.turbo/
+*.tsbuildinfo
+vite.config.*.timestamp-*
+
+# Runtime and local data
+tmp/
+uploads/
+*.log
+docker-compose.override.yml
+
+# Prisma generated/client artifacts
+prisma/generated/
+
+# Tests and tooling
+.nyc_output/
+playwright-report/
+test-results/
+
+# Editors and operating systems
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# OS-specific files
+Desktop.ini
+$RECYCLE.BIN/

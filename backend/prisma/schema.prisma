@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  sessions  Session[]
+  videos    Video[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model BackgroundJob {
+  id        String   @id @default(cuid())
+  queue     String
+  status    String   @default("queued")
+  payload   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([queue, status])
+}
+
+model Video {
+  id              String   @id @default(cuid())
+  sourceUrl       String
+  status          String   @default("queued")
+  r2KeyOriginal   String?
+  r2KeyAudio      String?
+  transcript      Json?
+  errorMessage    String?
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clips           Clip[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([status])
+  @@index([userId])
+}
+
+model Clip {
+  id        String   @id @default(cuid())
+  videoId   String
+  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  startMs   Int
+  endMs     Int
+  title     String?
+  summary   String?
+  r2Key     String?
+  createdAt DateTime @default(now())
+
+  @@index([videoId])
+}
